@@ -1,93 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
-
- int main(int argc, char *argv[])
-{
-	 char *buffer = NULL;
-	 int read;
-	 unsigned int len;
-	 char s;
-	 int fil ,col, i, j,k, fil2, col2, bytes_now;
-	 int bytes_consumed = 0;
-	 read = getline(&buffer, &len, stdin);
-
-	 while(-1 != read){
-		  bytes_consumed = 0;
-		  sscanf(buffer+ bytes_consumed, "%d%c%d%n", &fil,&s,&col, & bytes_now);
-		  //sscanf( string + bytes_consumed, "%d%n", arr , & bytes_now )
-		  bytes_consumed += bytes_now;
-		  printf("%d%c%d", fil,s,col);
-		  double matriz1[fil][col];
-		  for(i=0; i<fil;i++){
-			  for(j=0;j<col;j++){
-				  sscanf(buffer+ bytes_consumed, "%lf%n", &matriz1[i][j], & bytes_now);
-				  bytes_consumed += bytes_now;
-				  printf("%lf", matriz1[i][j]);
-			  }
-		  }
-		  read = getline(&buffer, &len, stdin);
-		  bytes_consumed = 0;
-		  sscanf(buffer+ bytes_consumed, "%d%c%d%n", &fil2,&s,&col2, & bytes_now);
-		  bytes_consumed += bytes_now;
-		  printf("%d%c%d", fil2,s,col2);
-		 	  double matriz2[fil2][col2];
-		 	  for(i=0; i<fil2;i++){
-		 		  for(j=0;j<col2;j++){
-		 			  sscanf(buffer+ bytes_consumed, "%lf%n", &matriz2[i][j], & bytes_now);
-		 			  bytes_consumed += bytes_now;
-		 			  printf("%lf", matriz2[i][j]);
-		 		  }
-		 	  }
-		 if (col== fil2){
-
-			 double sum;
-			 double out[fil][col2];
-			 	 for(i=0;i<fil;i++){ // fila de matriz 1
-			 		 for(j=0;j<col2;j++){  // columna de segunda matriz
-			 			 sum=0;
-			 			 for(k=0;k<col;k++)
-			 				 sum=sum+matriz1[i][k]*matriz2[k][j];
-			 				 out[i][j]=sum;
-			 		 }
-			 	 }
-		 	printf("\n Matriz resultado \n");
-		 	bytes_consumed = 0;
-		 	sprintf(buffer+ bytes_consumed,"%dx%d%n", fil,col2, & bytes_now);
-		 	bytes_consumed += bytes_now;
-		 	for(i=0;i<fil;i++){
-		 		for(j=0;j<col2;j++){
-		 			sprintf(buffer+ bytes_consumed," %lf%n",out[i][j], & bytes_now);
-		 			bytes_consumed += bytes_now;
-		 		}
-		 	}
-		 	puts(buffer);
-		 }
-		 else{
-			 printf("matriz incorrecta para la multiplicacion");
-		 	 return 0; // escribir error en archivo
-		 }
-		 read = getline(&buffer, &len, stdin);
-	 }
-
-	 printf("\n Size read: %d\n Len: %d\n", read, len);
-	 free(buffer);
-	 return 0;
-}
-
-
-
-/*
-
-
-* tp0.c
- *
- *  Created on: 31/08/2015
- *      Author: sami
-
-
 #include "tp0.h"
-extern int errno ;
 
+/**
+VALIDAR QUE NO SEAN CARACTERES
+SI ES ARCHIVO VACIO IMPRIMIR POR STDERR
+**/
+
+
+extern int errno ;
 
 
 void printHelp() {
@@ -185,92 +104,176 @@ int multiplicarMatrices(double v1[],int f1, int c1, double v2[], int f2, int c2,
 }
 
 
-int multiplyByInput(){
-	int a[5][5],b[5][5],c[5][5],i,j,k,sum=0,m,n,o,p;
-	printf("\nEnter the row and column of first matrix");
-	scanf("%d %d",&m,&n);
-	printf("\nEnter the row and column of second matrix");
-	scanf("%d %d",&o,&p);
-	if(n!=o){
-		printf("Matrix mutiplication is not possible");
-		printf("\nColumn of first matrix must be same as row of second matrix");
+ int main(int argc, char *argv[])
+{
+	if (!checkArguments(argc,argv)){
+		return 1;
 	}else{
-	  printf("\nEnter the First matrix->");
-	  for(i=0;i<m;i++)
-		  for(j=0;j<n;j++)
-			  scanf("%d",&a[i][j]);
-	  printf("\nEnter the Second matrix->");
-	  for(i=0;i<o;i++)
-		  for(j=0;j<p;j++)
-			  scanf("%d",&b[i][j]);
-	  printf("\nThe First matrix is\n");
-	  for(i=0;i<m;i++){
-	  printf("\n");
-	  for(j=0;j<n;j++){
-		   printf("%d\t",a[i][j]);
-	  }
-	  }
-	  printf("\nThe Second matrix is\n");
-	  for(i=0;i<o;i++){
-		  printf("\n");
-		  for(j=0;j<p;j++){
-			  printf("%d\t",b[i][j]);
-		  }
-	  }
-	  for(i=0;i<m;i++)
-		  for(j=0;j<p;j++)
-		   c[i][j]=0;
-	  for(i=0;i<m;i++){ //row of first matrix
-		  for(j=0;j<p;j++){  //column of second matrix
-			   sum=0;
-			   for(k=0;k<n;k++)
-				   sum=sum+a[i][k]*b[k][j];
-			   c[i][j]=sum;
-		  }
-	  }
+			 
+		char *buffer = NULL;
+		int read;
+		size_t len = 8;
+		char s;
+		int fil ,col, i, j,k, fil2, col2, bytes_now;
+		int bytes_consumed = 0;
+		read = getline(&buffer, &len, stdin);
+		if(read == -1){
+			//No recibio stream de entrada
+			printf("No stdin \n");
+		}
+
+		while(-1 != read){
+			bytes_consumed = 0;
+			sscanf(buffer+ bytes_consumed, "%d%c%d%n", &fil,&s,&col, & bytes_now);
+			//sscanf( string + bytes_consumed, "%d%n", arr , & bytes_now )
+			bytes_consumed += bytes_now;
+			// printf("%d%c%d", fil,s,col); //BORRAR DESPUES
+			double matriz1[fil][col];
+			for(i=0; i<fil;i++){
+				for(j=0;j<col;j++){
+				sscanf(buffer+ bytes_consumed, "%lf%n", &matriz1[i][j], & bytes_now);
+				bytes_consumed += bytes_now;
+				// printf("%lf", matriz1[i][j]); //BORRAR DESPUES
+				}
+			}
+			read = getline(&buffer, &len, stdin);
+			bytes_consumed = 0;
+			sscanf(buffer+ bytes_consumed, "%d%c%d%n", &fil2,&s,&col2, & bytes_now);
+			bytes_consumed += bytes_now;
+			//printf("%d%c%d", fil2,s,col2);
+			double matriz2[fil2][col2];
+			for(i=0; i<fil2;i++){
+				for(j=0;j<col2;j++){
+					sscanf(buffer+ bytes_consumed, "%lf%n", &matriz2[i][j], & bytes_now);
+					bytes_consumed += bytes_now;
+					//printf("%lf", matriz2[i][j]);
+				}
+			}
+			if (col== fil2){
+
+				double sum;
+				double out[fil][col2];
+				for(i=0;i<fil;i++){ // fila de matriz 1
+					for(j=0;j<col2;j++){  // columna de segunda matriz
+						sum=0;
+						for(k=0;k<col;k++)
+							sum=sum+matriz1[i][k]*matriz2[k][j];
+							out[i][j]=sum;
+					}
+				}
+				//printf("\n Matriz resultado \n");  //BORRAR DESPUES
+				bytes_consumed = 0;
+				sprintf(buffer+ bytes_consumed,"%dx%d%n", fil,col2, & bytes_now);
+				bytes_consumed += bytes_now;
+				for(i=0;i<fil;i++){
+					for(j=0;j<col2;j++){
+						sprintf(buffer+ bytes_consumed," %lf%n",out[i][j], & bytes_now);
+						bytes_consumed += bytes_now;
+					}
+				}
+				puts(buffer);
+			}else{
+				printf("matriz incorrecta para la multiplicacion"); //MANEJO STDERR
+				return 0; // escribir error en archivo
+			}
+			read = getline(&buffer, &len, stdin);
+		}
+
+		//printf("\n Size read: %d\n Len: %d\n", read, len); //BORRAR DESPUES
+		free(buffer);
+		return 0;
 	}
-	printf("\nThe multiplication of two matrix is\n");
-	for(i=0;i<m;i++){
-	  printf("\n");
-	  for(j=0;j<p;j++){
-		   printf("%d\t",c[i][j]);
-	  }
-	}
-	return 0;
 }
 
-int main(int argc, char* argv[]){
-//	 int errnum;
-//	   if (pf == NULL)
-//	   {
-//	      errnum = errno;
-//	      fprintf(stderr, "Value of errno: %d\n", errno);
-//	      perror("Error printed by perror");
-//	      fprintf(stderr, "Error opening file: %s\n", strerror( errnum ));
-//	   }
-//
-	if (!checkArguments(argc,argv)){
-		return 0;
-	}else{
-		//Datos a obtener de stdin
 
-		double v1[6] = {1.0, 3.0, 2.0, 4.0, 1.0, 2.0};
-		double v2[6] = {4.0, 1.0, 3.0, 5.0, 1.0, 2.0};
-		int f1= 2;
-		int c1= 3;
-		int f2= 3;
-		int c2= 2;
-		//Fin datos a obtener de stdin
-		double m1[f1][c1];
-		double m2[f2][c2];
-		multiplicarMatrices(v1,f1,c1,v2,f2,c2,m1,m2);
 
-		return 0;
-		// proceso
-		//return 1;
-	}
+// int multiplyByInput(){
+// 	int a[5][5],b[5][5],c[5][5],i,j,k,sum=0,m,n,o,p;
+// 	printf("\nEnter the row and column of first matrix");
+// 	scanf("%d %d",&m,&n);
+// 	printf("\nEnter the row and column of second matrix");
+// 	scanf("%d %d",&o,&p);
+// 	if(n!=o){
+// 		printf("Matrix mutiplication is not possible");
+// 		printf("\nColumn of first matrix must be same as row of second matrix");
+// 	}else{
+// 	  printf("\nEnter the First matrix->");
+// 	  for(i=0;i<m;i++)
+// 		  for(j=0;j<n;j++)
+// 			  scanf("%d",&a[i][j]);
+// 	  printf("\nEnter the Second matrix->");
+// 	  for(i=0;i<o;i++)
+// 		  for(j=0;j<p;j++)
+// 			  scanf("%d",&b[i][j]);
+// 	  printf("\nThe First matrix is\n");
+// 	  for(i=0;i<m;i++){
+// 	  printf("\n");
+// 	  for(j=0;j<n;j++){
+// 		   printf("%d\t",a[i][j]);
+// 	  }
+// 	  }
+// 	  printf("\nThe Second matrix is\n");
+// 	  for(i=0;i<o;i++){
+// 		  printf("\n");
+// 		  for(j=0;j<p;j++){
+// 			  printf("%d\t",b[i][j]);
+// 		  }
+// 	  }
+// 	  for(i=0;i<m;i++)
+// 		  for(j=0;j<p;j++)
+// 		   c[i][j]=0;
+// 	  for(i=0;i<m;i++){ //row of first matrix
+// 		  for(j=0;j<p;j++){  //column of second matrix
+// 			   sum=0;
+// 			   for(k=0;k<n;k++)
+// 				   sum=sum+a[i][k]*b[k][j];
+// 			   c[i][j]=sum;
+// 		  }
+// 	  }
+// 	}
+// 	printf("\nThe multiplication of two matrix is\n");
+// 	for(i=0;i<m;i++){
+// 	  printf("\n");
+// 	  for(j=0;j<p;j++){
+// 		   printf("%d\t",c[i][j]);
+// 	  }
+// 	}
+// 	return 0;
+// }
 
-}*/
+// int main(int argc, char* argv[]){
+// //	 int errnum;
+// //	   if (pf == NULL)
+// //	   {
+// //	      errnum = errno;
+// //	      fprintf(stderr, "Value of errno: %d\n", errno);
+// //	      perror("Error printed by perror");
+// //	      fprintf(stderr, "Error opening file: %s\n", strerror( errnum ));
+// //	   }
+// //
+// 	if (!checkArguments(argc,argv)){
+// 		return 0;
+// 	}else{
+// 		//Datos a obtener de stdin
+
+// 		double v1[6] = {1.0, 3.0, 2.0, 4.0, 1.0, 2.0};
+// 		double v2[6] = {4.0, 1.0, 3.0, 5.0, 1.0, 2.0};
+// 		int f1= 2;
+// 		int c1= 3;
+// 		int f2= 3;
+// 		int c2= 2;
+// 		//Fin datos a obtener de stdin
+// 		double m1[f1][c1];
+// 		double m2[f2][c2];
+// 		multiplicarMatrices(v1,f1,c1,v2,f2,c2,m1,m2);
+
+// 		return 0;
+// 		// proceso
+// 		//return 1;
+// 	}
+
+// }
+
 
 
 
