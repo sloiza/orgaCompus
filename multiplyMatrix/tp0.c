@@ -44,13 +44,13 @@ int validoLinea(char *linea){
 	int desp =0;
 	char fil = *(linea+desp);
 	desp++;
-	if( fil<'0' || fil > '9') printf ("%c", c);
+	if( fil<'0' || fil > '9') printf ("%c", fil);
 	char x = *(linea+desp);
 	desp++;
 	if(!((x=='x') || (x=='X'))) printf("%c", x);
 	char col = *(linea+desp);
 	desp++;
-	if( col<'0' || col > '9') printf ("%c", c2);
+	if( col<'0' || col > '9') printf ("%c", col);
 
 	int cantNums = 0;
 	char car =*(linea+desp);
@@ -59,11 +59,11 @@ int validoLinea(char *linea){
 		if(car == ' ') {
 			cantNums++;
 			car =*(linea+desp);
-			desp++
+			desp++;
 		}else{
 			if( (car>='0' && car <= '9') || (car =='.')){
 				car =*(linea+desp);
-				desp++
+				desp++;
 			}else{
 				printf("ERROR");
 				return -1;
@@ -71,6 +71,7 @@ int validoLinea(char *linea){
 		}
 
 	}
+	return cantNums;
 
 }
 
