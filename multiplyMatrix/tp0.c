@@ -132,7 +132,7 @@ int validoLinea(char *linea){
 		}
 		while(-1 != read){
 			int cantNumsMatriz = validoLinea(buffer);
-			printf("cantNums: %d\n", cantNumsMatriz );
+			//printf("cantNums: %d\n", cantNumsMatriz );
 			bytes_consumed = 0;
 			sscanf(buffer+ bytes_consumed, "%d%c%d%n", &fil,&s,&col, & bytes_now);
 			bytes_consumed += bytes_now;
