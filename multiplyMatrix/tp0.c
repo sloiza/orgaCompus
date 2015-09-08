@@ -11,15 +11,15 @@ extern int errno ;
 
 void printHelp() {
 	char *help = "Usage:"
-			"\t tp0 -h \n"
-			"\t tp0 -V \n"
-			"\t tp0 < in_file > out_file \n"
+			"\t ./tp0 -h \n"
+			"\t ./tp0 -V \n"
+			"\t ./tp0 < in_file > out_file \n"
 			"Options: \n"
 			" -V, --version \n\t Print version and quit. \n"
 			" -h, --help \n\t Print this information and quit.\n"
 			" Examples: \n"
-			"  tp0 < in.txt > out.txt \n"
-			"  cat in.txt | tp0 > out.txt \n";
+			"  ./tp0 < in.txt > out.txt \n"
+			"  cat in.txt | ./tp0 > out.txt \n";
 
 	printf("%s", help);
 }
@@ -39,47 +39,70 @@ int checkArguments(int cantidadArgumentos, char* argumentos[]) {
 
 	return retorno;
 }
-
+// 4x2 3.0 2.0 1.0 4.0 4.0 1.0 2.0 4.0
+// 10x2 3.0 2.0 1.0 4.0 4.0 1.0 2.0 4.0
 int validoLinea(char *linea){
 
 	int desp =0;
 	char fil = *(linea+desp);
-	desp++;
-	if( fil<'0' || fil > '9'){
-
+	//printf("FILA: %c\n", fil );
+	//desp++;
+	while( fil >='0' && fil <= '9'){
+		desp++;
+		fil = *(linea+desp);
+	}
+	//printf("FIL: %c\n",fil );
+	if( fil != 'x'){
 		fprintf (stderr,"Fila incorrecta. \n");
 		exit(1);
 	}
+	//printf("DESP: %d\n", desp);
 	char x = *(linea+desp);
-	desp++;
+	//printf("X: %c\n", x);
+	//
 	if(!((x=='x') || (x=='X'))){
 		fprintf(stderr,"Formato FxC incorrecto.  \n");
 		exit(1);
 	}
-	char col = *(linea+desp);
 	desp++;
-	if( col<'0' || col > '9'){
-		fprintf (stderr,"Columna incorrecta. \n");
-		exit(1);
+	char col = *(linea+desp);
+	//printf("col: %c\n", col);
+	//desp++;
+	while( col >='0' && col <= '9'){
+		desp++;
+		col = *(linea+desp);
+		//printf("col: %c\n", col);
 	}
-
+	
 	int cantNums = 0;
 	char car =*(linea+desp);
-	desp++;
-	while(car!= '\n'){
-		if(car == ' ') {
-			cantNums++;
-			car =*(linea+desp);
-			desp++;
-		}else{
-			if( (car>='0' && car <= '9') || (car =='.')){
-				car =*(linea+desp);
-				desp++;
-			}else{
+	if(car == ' '){
+		desp++;
+		car = *(linea+desp);
+	//	printf("car: %c\n", car);
+	}else{
+		fprintf(stderr, "Bad space \n" );
+	}
+	bool point = false;
+	while(car!= 0 && car != EOF){
+		//printf("car  %c\n", car);
+		while((car != ' ' && car >= '0' && car <= '9') || (car == '.')){
+			if(point && car == '.'){
 				fprintf(stderr,"Valores incorrectos. \n");
 				exit(1);
+			}else{
+				if(car == '.'){
+					point = true;
+				}
+				desp++;
+				car = *(linea+desp);
+				//printf("car: %c\n", car);
 			}
+
 		}
+		desp++;
+		car = *(linea+desp);	
+		cantNums++;
 
 	}
 	return cantNums;
@@ -107,15 +130,15 @@ int validoLinea(char *linea){
 			fprintf(stderr,"No stdin \n");
 			exit(1);
 		}
-
 		while(-1 != read){
 			int cantNumsMatriz = validoLinea(buffer);
+			printf("cantNums: %d\n", cantNumsMatriz );
 			bytes_consumed = 0;
 			sscanf(buffer+ bytes_consumed, "%d%c%d%n", &fil,&s,&col, & bytes_now);
 			bytes_consumed += bytes_now;
 			if(cantNumsMatriz!= (fil*col)){
 
-				fprintf(stderr,"Matriz incorrecta. \n");
+				fprintf(stderr,"Matriz incorrecta. %s \n", buffer);
 				exit(1);
 			}
 			//printf("\n%d%c%d", fil,s,col); //BORRAR DESPUES
@@ -135,7 +158,7 @@ int validoLinea(char *linea){
 			sscanf(buffer+ bytes_consumed, "%d%c%d%n", &fil2,&s,&col2, & bytes_now);
 			bytes_consumed += bytes_now;
 			if(cantNumsMatriz!= (fil2*col2)){
-				fprintf(stderr,"Matriz incorrecta.");
+				fprintf(stderr,"Matriz incorrecta. %s", buffer);
 				exit(1);
 			}
 			//printf("\n %d%c%d", fil2,s,col2);
@@ -242,39 +265,6 @@ int validoLinea(char *linea){
 // 	  }
 // 	}
 // 	return 0;
-// }
-
-// int main(int argc, char* argv[]){
-// //	 int errnum;
-// //	   if (pf == NULL)
-// //	   {
-// //	      errnum = errno;
-// //	      fprintf(stderr, "Value of errno: %d\n", errno);
-// //	      perror("Error printed by perror");
-// //	      fprintf(stderr, "Error opening file: %s\n", strerror( errnum ));
-// //	   }
-// //
-// 	if (!checkArguments(argc,argv)){
-// 		return 0;
-// 	}else{
-// 		//Datos a obtener de stdin
-
-// 		double v1[6] = {1.0, 3.0, 2.0, 4.0, 1.0, 2.0};
-// 		double v2[6] = {4.0, 1.0, 3.0, 5.0, 1.0, 2.0};
-// 		int f1= 2;
-// 		int c1= 3;
-// 		int f2= 3;
-// 		int c2= 2;
-// 		//Fin datos a obtener de stdin
-// 		double m1[f1][c1];
-// 		double m2[f2][c2];
-// 		multiplicarMatrices(v1,f1,c1,v2,f2,c2,m1,m2);
-
-// 		return 0;
-// 		// proceso
-// 		//return 1;
-// 	}
-
 // }
 
 

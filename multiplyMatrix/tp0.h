@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <error.h>
 #include <errno.h>
+#include <stdbool.h>
 
 
 #define SIZE_MAT 100
