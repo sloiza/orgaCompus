@@ -41,16 +41,27 @@ int checkArguments(int cantidadArgumentos, char* argumentos[]) {
 }
 
 int validoLinea(char *linea){
+
 	int desp =0;
 	char fil = *(linea+desp);
 	desp++;
-	if( fil<'0' || fil > '9') printf ("%c", fil);
+	if( fil<'0' || fil > '9'){
+
+		fprintf (stderr,"Fila incorrecta. \n");
+		exit(1);
+	}
 	char x = *(linea+desp);
 	desp++;
-	if(!((x=='x') || (x=='X'))) printf("%c", x);
+	if(!((x=='x') || (x=='X'))){
+		fprintf(stderr,"Formato FxC incorrecto.  \n");
+		exit(1);
+	}
 	char col = *(linea+desp);
 	desp++;
-	if( col<'0' || col > '9') printf ("%c", col);
+	if( col<'0' || col > '9'){
+		fprintf (stderr,"Columna incorrecta. \n");
+		exit(1);
+	}
 
 	int cantNums = 0;
 	char car =*(linea+desp);
@@ -65,8 +76,8 @@ int validoLinea(char *linea){
 				car =*(linea+desp);
 				desp++;
 			}else{
-				printf("ERROR");
-				return -1;
+				fprintf(stderr,"Valores incorrectos. \n");
+				exit(1);
 			}
 		}
 
@@ -90,41 +101,50 @@ int validoLinea(char *linea){
 		int fil=0 ,col=0, i, j,k, fil2=0, col2=0, bytes_now=0;
 		int bytes_consumed = 0;
 		read = getline(&buffer, &len, stdin);
-		validoLinea(buffer);
+
 		if(read == -1){
 			//No recibio stream de entrada
-			printf("No stdin \n");
+			fprintf(stderr,"No stdin \n");
+			exit(1);
 		}
 
 		while(-1 != read){
-
+			int cantNumsMatriz = validoLinea(buffer);
 			bytes_consumed = 0;
 			sscanf(buffer+ bytes_consumed, "%d%c%d%n", &fil,&s,&col, & bytes_now);
 			bytes_consumed += bytes_now;
-			printf("\n%d%c%d", fil,s,col); //BORRAR DESPUES
-			printf("\n tipo fil: %d\n tipo col: %d\n", sizeof(fil),sizeof(col));
+			if(cantNumsMatriz!= (fil*col)){
+
+				fprintf(stderr,"Matriz incorrecta. \n");
+				exit(1);
+			}
+			//printf("\n%d%c%d", fil,s,col); //BORRAR DESPUES
 			double matriz1[fil][col];
 			for(i=0; i<fil;i++){
 				for(j=0;j<col;j++){
 				sscanf(buffer+ bytes_consumed, "%lf%n", &matriz1[i][j], & bytes_now);
 				bytes_consumed += bytes_now;
-				 printf("%lf", matriz1[i][j]); //BORRAR DESPUES
-				 printf("\n tipo float: %d\n ", sizeof(matriz1[i][j]));
+				 ///printf("%lf", matriz1[i][j]); //BORRAR DESPUES
 				}
 			}
 
 			memset (buffer,0,SIZE_MAT);
 			read = getline(&buffer, &len, stdin);
+			cantNumsMatriz = validoLinea(buffer);
 			bytes_consumed = 0;
 			sscanf(buffer+ bytes_consumed, "%d%c%d%n", &fil2,&s,&col2, & bytes_now);
 			bytes_consumed += bytes_now;
-			printf("\n %d%c%d", fil2,s,col2);
+			if(cantNumsMatriz!= (fil2*col2)){
+				fprintf(stderr,"Matriz incorrecta.");
+				exit(1);
+			}
+			//printf("\n %d%c%d", fil2,s,col2);
 			double matriz2[fil2][col2];
 			for(i=0; i<fil2;i++){
 				for(j=0;j<col2;j++){
 					sscanf(buffer+ bytes_consumed, "%lf%n", &matriz2[i][j], & bytes_now);
 					bytes_consumed += bytes_now;
-					printf("%lf", matriz2[i][j]);
+					//printf("%lf", matriz2[i][j]);
 				}
 			}
 			if (col== fil2){
@@ -139,7 +159,7 @@ int validoLinea(char *linea){
 							out[i][j]=sum;
 					}
 				}
-				printf("\n Matriz resultado \n");  //BORRAR DESPUES
+				//printf("\n Matriz resultado \n");  //BORRAR DESPUES
 				bytes_consumed = 0;
 
 				memset (buffer,0,SIZE_MAT);
@@ -153,8 +173,8 @@ int validoLinea(char *linea){
 				}
 				puts(buffer);
 			}else{
-				printf("matriz incorrecta para la multiplicacion"); //MANEJO STDERR
-				return 0; // escribir error en archivo
+				fprintf(stderr,"Matrices incorrectas para la multiplicacion. \n"); //MANEJO STDERR
+				exit(1); // escribir error en archivo
 			}
 			memset (buffer,0,SIZE_MAT);
 			read = getline(&buffer, &len, stdin);
