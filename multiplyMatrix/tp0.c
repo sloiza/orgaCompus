@@ -40,67 +40,38 @@ int checkArguments(int cantidadArgumentos, char* argumentos[]) {
 	return retorno;
 }
 
+int validoLinea(char *linea){
+	int desp =0;
+	char fil = *(linea+desp);
+	desp++;
+	if( fil<'0' || fil > '9') printf ("%c", c);
+	char x = *(linea+desp);
+	desp++;
+	if(!((x=='x') || (x=='X'))) printf("%c", x);
+	char col = *(linea+desp);
+	desp++;
+	if( col<'0' || col > '9') printf ("%c", c2);
 
-int multiplicarMatrices(double v1[],int f1, int c1, double v2[], int f2, int c2, double m1[f1][c1], double m2[f2][c2] ) {
-
-	int i,j, k = 0;
-	double out[f1][c2];
-	//Completo la matriz 1
-	for(i = 0;i < f1 ; i++ ){
-		for(j = 0; j < c1 ; j++){
-			m1[i][j] = v1[k];
-			k++;
-		}
-	}
-	k=0;
-	//Completo la matriz 2
-	for(i = 0;i < f2 ; i++ ){
-		for(j = 0; j < c2 ; j++){
-			m2[i][j] = v2[k];
-			k++;
-		}
-	}
-	// Para visualizar las matrices
-	printf("\n Matriz 1: \n");
-	for(i=0;i<f1;i++){
-		printf("\n");
-		for(j=0;j<c1;j++){
-		   printf("%f\t",m1[i][j]);
-		}
-	}
-	printf("\n Matriz 2: \n");
-	for(i=0;i<f2;i++){
-	  printf("\n");
-	  for(j=0;j<c2;j++){
-		  printf("%f\t",m2[i][j]);
-	  }
-	}
-	// Fin para visualizar las matrices
-	//Pongo todos los valores de salida en 0
-	for(i=0;i<f1;i++){
-		for(j=0;j<c2;j++){
-			out[i][j]=0.0;
-		}
-	}
-	double sum;
-	for(i=0;i<f1;i++){ // fila de matriz 1
-		for(j=0;j<c2;j++){  // columna de segunda matriz
-			sum=0;
-			for(k=0;k<c1;k++)
-				sum=sum+m1[i][k]*m2[k][j];
-				out[i][j]=sum;
-		}
-	}
-	printf("\n Matriz resultado \n");
-		for(i=0;i<f1;i++){
-		  printf("\n");
-		  for(j=0;j<c2;j++){
-			   printf("%f\t",out[i][j]);
-		  }
+	int cantNums = 0;
+	char car =*(linea+desp);
+	desp++;
+	while(car!= '\n'){
+		if(car == ' ') {
+			cantNums++;
+			car =*(linea+desp);
+			desp++
+		}else{
+			if( (car>='0' && car <= '9') || (car =='.')){
+				car =*(linea+desp);
+				desp++
+			}else{
+				printf("ERROR");
+				return -1;
+			}
 		}
 
+	}
 
-	return 0;
 }
 
 
@@ -109,44 +80,50 @@ int multiplicarMatrices(double v1[],int f1, int c1, double v2[], int f2, int c2,
 	if (!checkArguments(argc,argv)){
 		return 1;
 	}else{
-			 
-		char *buffer = NULL;
-		int read;
-		size_t len = 8;
+
+		char *buffer= NULL;
+
+		int read = 0;
+		size_t len =0;
 		char s;
-		int fil ,col, i, j,k, fil2, col2, bytes_now;
+		int fil=0 ,col=0, i, j,k, fil2=0, col2=0, bytes_now=0;
 		int bytes_consumed = 0;
 		read = getline(&buffer, &len, stdin);
+		validoLinea(buffer);
 		if(read == -1){
 			//No recibio stream de entrada
 			printf("No stdin \n");
 		}
 
 		while(-1 != read){
+
 			bytes_consumed = 0;
 			sscanf(buffer+ bytes_consumed, "%d%c%d%n", &fil,&s,&col, & bytes_now);
-			//sscanf( string + bytes_consumed, "%d%n", arr , & bytes_now )
 			bytes_consumed += bytes_now;
-			// printf("%d%c%d", fil,s,col); //BORRAR DESPUES
+			printf("\n%d%c%d", fil,s,col); //BORRAR DESPUES
+			printf("\n tipo fil: %d\n tipo col: %d\n", sizeof(fil),sizeof(col));
 			double matriz1[fil][col];
 			for(i=0; i<fil;i++){
 				for(j=0;j<col;j++){
 				sscanf(buffer+ bytes_consumed, "%lf%n", &matriz1[i][j], & bytes_now);
 				bytes_consumed += bytes_now;
-				// printf("%lf", matriz1[i][j]); //BORRAR DESPUES
+				 printf("%lf", matriz1[i][j]); //BORRAR DESPUES
+				 printf("\n tipo float: %d\n ", sizeof(matriz1[i][j]));
 				}
 			}
+
+			memset (buffer,0,SIZE_MAT);
 			read = getline(&buffer, &len, stdin);
 			bytes_consumed = 0;
 			sscanf(buffer+ bytes_consumed, "%d%c%d%n", &fil2,&s,&col2, & bytes_now);
 			bytes_consumed += bytes_now;
-			//printf("%d%c%d", fil2,s,col2);
+			printf("\n %d%c%d", fil2,s,col2);
 			double matriz2[fil2][col2];
 			for(i=0; i<fil2;i++){
 				for(j=0;j<col2;j++){
 					sscanf(buffer+ bytes_consumed, "%lf%n", &matriz2[i][j], & bytes_now);
 					bytes_consumed += bytes_now;
-					//printf("%lf", matriz2[i][j]);
+					printf("%lf", matriz2[i][j]);
 				}
 			}
 			if (col== fil2){
@@ -161,9 +138,11 @@ int multiplicarMatrices(double v1[],int f1, int c1, double v2[], int f2, int c2,
 							out[i][j]=sum;
 					}
 				}
-				//printf("\n Matriz resultado \n");  //BORRAR DESPUES
+				printf("\n Matriz resultado \n");  //BORRAR DESPUES
 				bytes_consumed = 0;
-				sprintf(buffer+ bytes_consumed,"%dx%d%n", fil,col2, & bytes_now);
+
+				memset (buffer,0,SIZE_MAT);
+				sprintf(buffer+ bytes_consumed,"%dx%d%n\n", fil,col2, & bytes_now);
 				bytes_consumed += bytes_now;
 				for(i=0;i<fil;i++){
 					for(j=0;j<col2;j++){
@@ -176,10 +155,13 @@ int multiplicarMatrices(double v1[],int f1, int c1, double v2[], int f2, int c2,
 				printf("matriz incorrecta para la multiplicacion"); //MANEJO STDERR
 				return 0; // escribir error en archivo
 			}
+			memset (buffer,0,SIZE_MAT);
 			read = getline(&buffer, &len, stdin);
+
 		}
 
 		//printf("\n Size read: %d\n Len: %d\n", read, len); //BORRAR DESPUES
+
 		free(buffer);
 		return 0;
 	}
