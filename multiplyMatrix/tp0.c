@@ -33,20 +33,24 @@ int checkArguments(int cantidadArgumentos, char* argumentos[]) {
 
 	return retorno;
 }
-
+// 4x2 3.0 2.0 1.0 4.0 4.0 1.0 2.0 4.0
+// 10x2 3.0 2.0 1.0 4.0 4.0 1.0 2.0 4.0
 int validoLinea(char *linea){
 
 	int desp =0;
 	char fil = *(linea+desp);
+
 	while( fil >='0' && fil <= '9'){
 		desp++;
 		fil = *(linea+desp);
 	}
+
 	if( fil != 'x'){
 		fprintf (stderr,"Fila incorrecta. \n");
 		exit(1);
 	}
 	char x = *(linea+desp);
+
 	if(!((x=='x') || (x=='X'))){
 		fprintf(stderr,"Formato FxC incorrecto.  \n");
 		exit(1);
@@ -129,7 +133,6 @@ int validoLinea(char *linea){
 				bytes_consumed += bytes_now;
 				}
 			}
-
 			memset (buffer,0,SIZE_MAT);
 			read = getline(&buffer, &len, stdin);
 			cantNumsMatriz = validoLinea(buffer);
@@ -184,4 +187,3 @@ int validoLinea(char *linea){
 		return 0;
 	}
 }
-
