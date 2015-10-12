@@ -33,8 +33,8 @@ int checkArguments(int cantidadArgumentos, char* argumentos[]) {
 
 	return retorno;
 }
-// 4x2 3.0 2.0 1.0 4.0 4.0 1.0 2.0 4.0
-// 10x2 3.0 2.0 1.0 4.0 4.0 1.0 2.0 4.0
+
+
 int validoLinea(char *linea){
 
 	int desp =0;
@@ -47,13 +47,13 @@ int validoLinea(char *linea){
 
 	if( fil != 'x'){
 		fprintf (stderr,"Fila incorrecta. \n");
-		exit(1);
+		return -1;
 	}
 	char x = *(linea+desp);
 
 	if(!((x=='x') || (x=='X'))){
 		fprintf(stderr,"Formato FxC incorrecto.  \n");
-		exit(1);
+		return -1;
 	}
 	desp++;
 	char col = *(linea+desp);
@@ -76,7 +76,7 @@ int validoLinea(char *linea){
 		while((car != ' ' && car >= '0' && car <= '9') || (car == '.')){
 			if(point && car == '.'){
 				fprintf(stderr,"Valores incorrectos. \n");
-				exit(1);
+				return -1;
 			}else{
 				if(car == '.'){
 					point = true;
@@ -114,23 +114,29 @@ int validoLinea(char *linea){
 		if(read == -1){
 			//No recibio stream de entrada
 			fprintf(stderr,"No stdin \n");
+			free(buffer);
 			exit(1);
 		}
 		while(-1 != read){
 			int cantNumsMatriz = validoLinea(buffer);
+			if(cantNumsMatriz == -1){
+				fprintf(stderr,"Linea incorrecta. %s \n", buffer);				
+				free(buffer);
+				exit(1);
+			}
 			bytes_consumed = 0;
 			sscanf(buffer+ bytes_consumed, "%d%c%d%n", &fil,&s,&col, & bytes_now);
 			bytes_consumed += bytes_now;
 			if(cantNumsMatriz!= (fil*col)){
-
 				fprintf(stderr,"Matriz incorrecta. %s \n", buffer);
+				free(buffer);
 				exit(1);
 			}
 			double matriz1[fil][col];
 			for(i=0; i<fil;i++){
 				for(j=0;j<col;j++){
-				sscanf(buffer+ bytes_consumed, "%lf%n", &matriz1[i][j], & bytes_now);
-				bytes_consumed += bytes_now;
+					sscanf(buffer+ bytes_consumed, "%lf%n", &matriz1[i][j], & bytes_now);
+					bytes_consumed += bytes_now;
 				}
 			}
 			memset (buffer,0,SIZE_MAT);
@@ -141,6 +147,7 @@ int validoLinea(char *linea){
 			bytes_consumed += bytes_now;
 			if(cantNumsMatriz!= (fil2*col2)){
 				fprintf(stderr,"Matriz incorrecta. %s", buffer);
+				free(buffer);
 				exit(1);
 			}
 			double matriz2[fil2][col2];
@@ -176,6 +183,7 @@ int validoLinea(char *linea){
 				puts(buffer);
 			}else{
 				fprintf(stderr,"Matrices incorrectas para la multiplicacion. \n"); 
+				free(buffer);
 				exit(1); 
 			}
 			memset (buffer,0,SIZE_MAT);
