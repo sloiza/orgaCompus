@@ -1,6 +1,3 @@
-# multiplicarMatrices(fil, col, fil2, col2, &matriz1, &matriz2, &out);	
-#ifndef USE_MIPS_ASSEMBLY
-#define USE_MIPS_ASSEMBLY
 #include <mips/regdef.h>
 #include <sys/syscall.h>
 	.text
@@ -34,5 +31,3 @@ multiplicarMatrices:
 	.rdata
 
 hola:		.asciiz "holaaaa:"
-
-#endif USE_MIPS_ASSEMBLY
