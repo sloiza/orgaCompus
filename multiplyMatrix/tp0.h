@@ -18,7 +18,7 @@
 	int  checkArguments(int,char*[]);
 
 	int validoLinea(char *linea);
-	extern int multiplicarMatrices(int f1, int c1, int f2, int c2, double* m1, double* m2, double* out);
+	extern void multiplicarMatrices(int f1, int c1, int f2, int c2, double* m1, double* m2, double* out);
 
 
 //	int multiplicarMatrices(int f1, int c1, int f2, int c2, double* m1, double* m2, double* out);
