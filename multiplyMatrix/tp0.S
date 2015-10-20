@@ -75,15 +75,15 @@ f2:		lw  	t0,40(sp) #t0 = k
 f3: 	lw  	t2, 36(sp) #t2 =j
 		lw  	t3, 52(sp) #t3=f2*c2
 		bge 	t2,t3,endf3 #j< f2*c2
-		lw  	t3, 16(sp) #t3=m1
-		sll 	t2,t2,3 #j=j*8 (8bytes)
-		addu 	t3,t3,t2  #t3 = &m1[j]
 		lw 		t1,44(sp) #t1=m
+		lw  	t3, 16(sp) #t3=m1
+		sll 	t1,t1,3 #t1=m*8 (8bytes)
+		addu 	t3,t3,t1  #t3 = &m1[m]
 		lw  	t4, 20(sp) #t4=m2
-		sll 	t1,t1,3  #t1= m*8
-		addu 	t4,t4,t1  #t4= &m2[m]
-		l.d   	$f2,0(t3) #f1 = m1[j]
-		l.d   	$f4,0(t4) #f2= m2[m]
+		sll 	t2,t2,3  #t2= j*8
+		addu 	t4,t4,t2  #t4= &m2[j]
+		l.d   	$f2,0(t3) #f1 = m1[m]
+		l.d   	$f4,0(t4) #f2= m2[j]
 		mul.d 	$f2,$f2,$f4
 		add.d 	$f0,$f0,$f2
 		lw  	t1,44(sp)
