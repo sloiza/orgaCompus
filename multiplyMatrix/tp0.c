@@ -140,7 +140,7 @@ int validoLinea(char *linea){
 
 		while (fgets(buffer, sizeof(buffer), stdin) != 0)
 		{
-
+			fprintf(stderr,"buffer. %s \n", buffer);
 		    int cantNumsMatriz = validoLinea(buffer);
 		    if(cantNumsMatriz == -1){
 		    	fprintf(stderr,"Linea incorrecta. %s \n", buffer);
@@ -158,12 +158,15 @@ int validoLinea(char *linea){
 		    		exit(1);
 		   }
 		   	for(i = 0 ; i < cantNumsMatriz; i++){
+
 		    	sscanf(buffer+ bytes_consumed, "%lf%n", &matriz1[i], & bytes_now);
+		    	printf("Matriz 1: %lf \n",matriz1[i]);
 		    	bytes_consumed += bytes_now;
 		    }
 
-		    memset(buffer,0,SIZE_MAT);
+		    //memset(buffer,0,SIZE_MAT);
 		    fgets(buffer, sizeof(buffer), stdin);
+		    fprintf(stderr,"buffer %s \n", buffer);
 		    cantNumsMatriz = validoLinea(buffer);
 		    double matriz2[cantNumsMatriz];
 		    bytes_consumed = 0;
@@ -176,6 +179,7 @@ int validoLinea(char *linea){
 		    }
 		    for(i = 0 ; i < cantNumsMatriz; i++){
 		    	sscanf(buffer+ bytes_consumed, "%lf%n", &matriz2[i], & bytes_now);
+		    	printf("Matriz 2: %lf \n",matriz1[i]);
 		    	bytes_consumed += bytes_now;
 		    }
 
@@ -183,11 +187,16 @@ int validoLinea(char *linea){
 		    	double out[fil*col2];
 		    	int status = -1;
 		    	status = multiplicarMatrices(fil, col, fil2, col2, &matriz1, &matriz2, &out);
-		    	exit (0);
+		    	for(i=0;i<fil*col2;i++){
+		    		printf("matriz out: %lf \n",out[i]);
+
+		    	}
+
 		    	if(status == 0){
 
 		    	}else{
 		    		fprintf(stderr,"Multiplicacion incorrecta. %s", buffer);
+
 		    	}
 
 		    	bytes_consumed = 0;
@@ -205,7 +214,7 @@ int validoLinea(char *linea){
 		    	free(buffer);
 		    	exit(1);
 		    }
-		    memset (buffer,0,SIZE_MAT);
+		    //memset (buffer,0,SIZE_MAT);
 
 		}
 
