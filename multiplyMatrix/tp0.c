@@ -183,6 +183,7 @@ int validoLinea(char *linea){
 		    	double out[fil*col2];
 		    	int status = -1;
 		    	status = multiplicarMatrices(fil, col, fil2, col2, &matriz1, &matriz2, &out);
+		    	exit (0);
 		    	if(status == 0){
 
 		    	}else{
