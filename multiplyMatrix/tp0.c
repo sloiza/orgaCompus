@@ -179,7 +179,7 @@ int validoLinea(char *linea){
 		    }
 		    for(i = 0 ; i < cantNumsMatriz; i++){
 		    	sscanf(buffer+ bytes_consumed, "%lf%n", &matriz2[i], & bytes_now);
-		    	printf("Matriz 2: %lf \n",matriz1[i]);
+		    	printf("Matriz 2: %lf \n",matriz2[i]);
 		    	bytes_consumed += bytes_now;
 		    }
 
