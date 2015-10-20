@@ -16,14 +16,12 @@ multiplicarMatrices:
 		sw ra, 72(sp)
 		sw $fp, 68(sp)
 		move $fp,sp
-	
-
 
 		sw		a0,80(sp) #f1
 		sw 		a1,84(sp) #c1
 		sw 		a2,88(sp) #f2
 		sw 		a3,92(sp) #c2
-
+#cargo en registros los argumentos recibidos por a funci´on
 		lw 		a0, 80(sp) #f1 LTA
 		lw 		a1,84(sp) #c1 LTA
 		lw 		a2,88(sp) #f2 LTA
@@ -31,33 +29,33 @@ multiplicarMatrices:
 		lw 		t0, 96(sp) #dir M1
 		lw 		t1, 100(sp) #dir M2
 		lw 		t2,104(sp) #dir outs
-
-		sw 		t0, 16(sp)
-		sw 		t1, 20(sp)
-		sw 		t2, 24(sp)
+#guardo en SF la direccion de m1, m2, out
+		sw 		t0, 16(sp) 
+		sw 		t1, 20(sp) 
+		sw 		t2, 24(sp) 
 
 		lw 		t0,80(sp) #t0=f1
 		lw 		t1,84(sp) #t1=c1
 		lw 		t2,88(sp) #t2=f2
 		lw 		t3,92(sp) #t3=c2
-
-		sw 		t0, 0(sp) #guardo f1
-		sw 		t1, 4(sp)
+	#guardo f1, c1, f2,c2
+		sw 		t0, 0(sp) 
+		sw 		t1, 4(sp) 
 		sw 		t2, 8(sp)
 		sw 		t3, 12(sp)
 
-		li 		t0,0
-		sw 		t0,28(sp)
-		sw 		t0,32(sp)
+		li 		t0,0 #cargo valor el valor 0 en t0
+		sw 		t0,28(sp) #pos = 0
+		sw 		t0,32(sp) # i = 0
 		lw 		t1,0(sp) #t1=f1
 		lw 		t2,4(sp) #t2=c1
 		mul 	t1,t1,t2 #t1=f1*c1
-		sw  	t1,48(sp)
+		sw  	t1,48(sp) #cantidad de elementos matriz 1
 
 		lw 		t1,8(sp) #t1=f2
 		lw 		t2,12(sp) #t2=c2
 		mul 	t1,t1,t2 #t1=f2*c2
-		sw  	t1,52(sp)
+		sw  	t1,52(sp) #cantidad de elementros matriz 2
 
 f1: 	lw 		t0, 32(sp)  #t0= i
 		lw 		t1, 48(sp)  #t1 = f1*c1
@@ -68,7 +66,7 @@ f2:		lw  	t0,40(sp) #t0 = k
 		lw  	t1,12(sp)  #t1= c2
 		bge 	t0,t1,endf2   #k<c2
 		li.d  	$f0,0.00000  #f0=sum=0
-		lw  	t1,32(sp)
+		lw  	t1,32(sp) #t1 = i
 		sw  	t1, 44(sp) #m =i
 		lw  	t2, 40(sp) #t2=k
 		sw  	t2, 36(sp) #j=k
@@ -86,9 +84,9 @@ f3: 	lw  	t2, 36(sp) #t2 =j
 		l.d   	$f4,0(t4) #f2= m2[j]
 		mul.d 	$f2,$f2,$f4
 		add.d 	$f0,$f0,$f2
-		lw  	t1,44(sp)
-		addi 	t1,t1,1
-		sw  	t1,44(sp) # m++
+		lw  	t1,44(sp) #cargo en t1 el valor de m
+		addi 	t1,t1,1 #m = m+1
+		sw  	t1,44(sp) # actualizo m
 		lw  	t1,36(sp) #t1=j
 		lw  	t2,12(sp)  #t2 =c2
 		addu 	t1,t1,t2  #t1= j+c2
@@ -116,10 +114,7 @@ endf2: 	lw 		t0, 32(sp) #t0 = i
 endf1: 	move sp, $fp
 	lw $fp, 68(sp) #recupero fp
 	lw ra, 72(sp) #recupero ra
-	addu sp,sp,80
+	addu sp,sp,80 #restablezco stack frame
 	jr ra
 	.end multiplicarMatrices
 
-	.rdata
-
-hola:		.asciiz "holalqpeorjfngjkwkwwkwkwkaaa:\n"

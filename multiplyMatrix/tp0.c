@@ -1,8 +1,6 @@
 
 #include "tp0.h"
 
-//extern int errno ;
-
 void printHelp() {
 	char *help = "Usage:"
 			"\t ./tp0 -h \n"
@@ -34,30 +32,22 @@ int checkArguments(int cantidadArgumentos, char* argumentos[]) {
 	return retorno;
 }
 
-// int multiplicarMatrices(int f1, int c1, int f2, int c2, double* m1, double* m2, double* out) {
+// void multiplicarMatrices(int f1, int c1, int f2, int c2, double* m1, double* m2, double* out) {
 // 	int pos = 0;
 // 	int i,j,k, m;
-// 	// printf("Cant Elems m1 = %d, m2 =%d\n", f1*c1, f2*c2);
 // 	for( i =0 ; i < f1*c1; i=i+c1){
-// 		// printf("Entro for de I con i = %d\n",i );
 // 		for(k=0; k < c2 ; k++){
 // 			double sum = 0.0;
 // 			m = i;
 // 			// printf("Entro for de K con k = %d\n",k );
 // 			for(j=k; j < f2*c2; j=j+c2){
-// 				// printf("Entro for de J con j = %d\n",j );
-// 				// printf("Multiplico: %lf con %lf con i= %d, m=%d,j=%d,k=%d\n", m1[m], m2[j], i,m, j,k);
 // 				sum+= m1[m]*m2[j];
-// 				// printf("SUMA parcial: %lf\n", sum);
 // 				m++;
 // 			}
-// 			// printf("OUT pos = %d, vale %lf \n",pos,sum );
 // 			out[pos] = sum;
 // 			pos++;
 // 		}
 // 	}
-// 	return 0;
-//
 // }
 
 
@@ -130,9 +120,7 @@ int validoLinea(char *linea){
 		char s;
 		int fil=0 ,col=0, i =0, fil2=0, col2=0, bytes_now=0;
 		int bytes_consumed = 0;
-
 		char buffer[BUFSIZ];
-
 		while (fgets(buffer, sizeof(buffer), stdin) != 0)
 		{
 		    int cantNumsMatriz = validoLinea(buffer);
@@ -141,7 +129,6 @@ int validoLinea(char *linea){
 		    	free(buffer);
 		    	exit(1);
 		   }
-
 		    double matriz1[cantNumsMatriz];
 		    bytes_consumed = 0;
 		    sscanf(buffer+ bytes_consumed, "%d%c%d%n", &fil,&s,&col, & bytes_now);
@@ -152,7 +139,6 @@ int validoLinea(char *linea){
 		    		exit(1);
 		   }
 		   	for(i = 0 ; i < cantNumsMatriz; i++){
-
 		    	sscanf(buffer+ bytes_consumed, "%lf%n", &matriz1[i], & bytes_now);
 		    	bytes_consumed += bytes_now;
 		    }
@@ -174,7 +160,6 @@ int validoLinea(char *linea){
 
 		    if (col== fil2){
 		    	double out[fil*col2];
-		    	int status = -1;
 		    	multiplicarMatrices(fil, col, fil2, col2, &matriz1, &matriz2, &out);
 		    	bytes_consumed = 0;
 		    	memset (buffer,0,SIZE_MAT);
@@ -184,14 +169,12 @@ int validoLinea(char *linea){
 		    		sprintf(buffer+ bytes_consumed," %lf%n",out[i], & bytes_now);
 		    		bytes_consumed += bytes_now;
 		    	}
-
 		    	puts(buffer);
 		    }else{
 		    	fprintf(stderr,"Matrices incorrectas para la multiplicacion. \n");
 		    	free(buffer);
 		    	exit(1);
 		    }
-
 		}
 	}
 	return 0;
