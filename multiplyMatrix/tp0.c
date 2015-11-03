@@ -32,33 +32,33 @@ int checkArguments(int cantidadArgumentos, char* argumentos[]) {
 	return retorno;
 }
 
- void multiplicarMatrices(int f1, int c1, int f2, int c2, double* m1, double* m2, double* out) {
-//	 printf("puntero a m1 3 : %p \n", m1);
-//	 printf("puntero a m2 3 : %p \n", m2);
-//	 for(int j =0; j< f1*c1; j++){
-//		printf("CANT ELEMS 1: %d double leido del buffer %lf \n", f1*c1, m1[j]);
-//	}
-//	for(int j =0; j< f2 * c2; j++){
-//		printf("CANT ELEMS 2: %d double leido del buffer %lf \n", f2 * c2, m2[j]);
-//	}
-
-	 int pos = 0;
- 	int i,j,k, m;
- 	for( i =0 ; i < f1*c1; i=i+c1){
- 		for(k=0; k < c2 ; k++){
- 			double sum = 0.0;
- 			m = i;
- 			// printf("Entro for de K con k = %d\n",k );
- 			for(j=k; j < f2*c2; j=j+c2){
- 				sum+= m1[m]*m2[j];
- 				m++;
- 			}
- 			out[pos] = sum;
- 			pos++;
- 		}
- 	}
- }
-
+// void multiplicarMatrices(int f1, int c1, int f2, int c2, double* m1, double* m2, double* out) {
+////	 printf("puntero a m1 3 : %p \n", m1);
+////	 printf("puntero a m2 3 : %p \n", m2);
+////	 for(int j =0; j< f1*c1; j++){
+////		printf("CANT ELEMS 1: %d double leido del buffer %lf \n", f1*c1, m1[j]);
+////	}
+////	for(int j =0; j< f2 * c2; j++){
+////		printf("CANT ELEMS 2: %d double leido del buffer %lf \n", f2 * c2, m2[j]);
+////	}
+//
+//	 int pos = 0;
+// 	int i,j,k, m;
+// 	for( i =0 ; i < f1*c1; i=i+c1){
+// 		for(k=0; k < c2 ; k++){
+// 			double sum = 0.0;
+// 			m = i;
+// 			// printf("Entro for de K con k = %d\n",k );
+// 			for(j=k; j < f2*c2; j=j+c2){
+// 				sum+= m1[m]*m2[j];
+// 				m++;
+// 			}
+// 			out[pos] = sum;
+// 			pos++;
+// 		}
+// 	}
+// }
+//
 
 int validoLinea(double *linea){
 
@@ -123,67 +123,6 @@ int validoLinea(double *linea){
 	return cantNums;
 
 }
-
-//int main(int argc, char *argv[]){
-//	int fil1 = 0, col1 = 0, fil2 = 0, col2 = 0;
-//	int cantNums1 = 0, cantNums2 = 0;
-//	double* m1;
-//	double* m2;
-//	char x;
-//	double v1 = 0.0,v2 = 0.0;
-//	do{
-//		//leo matriz 1
-//		if( fscanf(stdin, "%d %c %d", &fil1, &x, &col1 )==3){
-//			printf("1-  fil :%d, col: %d", fil1, col1);
-//			cantNums1 = fil1 * col1;
-//			m1 = (double*) malloc(sizeof(double)*cantNums1);
-//			if (ferror (stdin)) printf ("Error reading stdin\n");
-//			//do{
-//			for(int j =0;j<cantNums1; j++){
-//				printf("value v1 antes de leer : %lf \n", v1 );
-//				if(fscanf(stdin, "%lf", &v1) ==1){
-//					printf("value leido : %lf \n", v1 );
-//					m1[j] = v1;
-//					//tamBuff1++;
-//				}
-//				if (ferror (stdin)) printf ("Error reading stdin\n");
-//			}
-//
-//
-//		}
-//		//c = fgetc(stdin);
-//		//printf("%c \n", c);
-//		//leo matriz 2
-//		//if(c != 10){
-//		 if(fscanf(stdin, "%d %c %d", &fil2, &x, &col2 ) == 3){
-//			printf("2 - fil :%d, col: %d", fil2, col2);
-//			cantNums2 = fil2 * col2;
-//			m2 = (double*) malloc(sizeof(double)*cantNums2);
-//			if (ferror (stdin)) printf ("Error reading stdin\n");
-//			//do{
-//			for(int j =0;j<cantNums2; j++){
-//				printf("value v2 antes de leer : %lf \n", v2 );
-//				if(fscanf(stdin, "%lf", &v2) ==1){
-//					printf("value leido 2 : %lf \n", v2 );
-//					m2[j] = v2;
-//					}
-//				if (ferror (stdin)) printf ("Error reading stdin\n");
-//			}
-//		}else{
-//			printf("no leyo 3 \n");
-//		}
-//	}while(!feof(stdin));
-//
-//	//}while((v1 != EOF) && ((char)v1 != '\n') );
-//	printf("HOLA \n");
-//	for(int j =0; j< cantNums1; j++){
-//		printf("CANT ELEMS 1: %d double leido del buffer %lf \n", cantNums1, m1[j]);
-//	}
-//	for(int j =0; j< cantNums2; j++){
-//		printf("CANT ELEMS 2: %d double leido del buffer %lf \n", cantNums2, m2[j]);
-//	}
-
-//}
 
 
  int main(int argc, char *argv[])
@@ -315,10 +254,10 @@ int validoLinea(double *linea){
 
 
 			if (col1== fil2){
-				double out[fil1*col2];
+				double* out = (double*) malloc(sizeof(double)*fil1*col2);
 				printf("puntero a m1 2: %p\n", m1);
 				printf("puntero a m2 2: %p\n", m2);
-				multiplicarMatrices(fil1, col1, fil2, col2, m1, m2, &out);
+				multiplicarMatrices(fil1, col1, fil2, col2, m1, m2, out);
 				for(int j =0; j< fil1*col2; j++){
 					printf("OUT: %d double leido del buffer %lf \n", cantNums2, out[j]);
 				}
@@ -338,6 +277,10 @@ int validoLinea(double *linea){
 				if(m2 != NULL){
 					free(m2);
 					m2 = NULL;
+				}
+				if(out !=NULL){
+					free(out);
+					out = NULL;
 				}
 			}else{
 				fprintf(stderr,"Matrices incorrectas para la multiplicacion. \n");

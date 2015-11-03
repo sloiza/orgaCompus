@@ -21,16 +21,16 @@ multiplicarMatrices:
 		sw 		a1,84(sp) #c1
 		sw 		a2,88(sp) #f2
 		sw 		a3,92(sp) #c2
-#cargo en registros los argumentos recibidos por a funci´on
-		lw 		a0, 80(sp) #f1 LTA
+
+		lw 		a0, 80(sp) #f1 LTA #cargo en registros los argumentos recibidos por a funci´on
 		lw 		a1,84(sp) #c1 LTA
 		lw 		a2,88(sp) #f2 LTA
 		lw 		a3,92(sp) #c2 LTA
 		lw 		t0, 96(sp) #dir M1
 		lw 		t1, 100(sp) #dir M2
 		lw 		t2,104(sp) #dir outs
-#guardo en SF la direccion de m1, m2, out
-		sw 		t0, 16(sp) 
+
+		sw 		t0, 16(sp) #guardo en SF la direccion de m1, m2, out
 		sw 		t1, 20(sp) 
 		sw 		t2, 24(sp) 
 
@@ -38,8 +38,8 @@ multiplicarMatrices:
 		lw 		t1,84(sp) #t1=c1
 		lw 		t2,88(sp) #t2=f2
 		lw 		t3,92(sp) #t3=c2
-	#guardo f1, c1, f2,c2
-		sw 		t0, 0(sp) 
+
+		sw 		t0, 0(sp) #guardo f1, c1, f2,c2
 		sw 		t1, 4(sp) 
 		sw 		t2, 8(sp)
 		sw 		t3, 12(sp)
