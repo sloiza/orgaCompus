@@ -165,6 +165,25 @@ int checkArguments(int cantidadArgumentos, char* argumentos[]) {
 					bytes_consumed += bytes_now;
 				}
 				puts(buffer);
+				if (ferror(stdout)){
+					fprintf(stderr, "Error printing stdin\n");
+					if(m1 != NULL){
+						free(m1);
+						m1 = NULL;
+					}
+					if(m2 != NULL){
+						free(m2);
+						m2 = NULL;
+					}
+					if(out !=NULL){
+						free(out);
+						out = NULL;
+					}
+					exit(EXIT_FAILURE);
+				}
+
+
+
 				if(m1 != NULL){
 					free(m1);
 					m1 = NULL;
