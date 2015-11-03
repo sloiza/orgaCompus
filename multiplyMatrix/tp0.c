@@ -130,7 +130,7 @@ int validoLinea(double *linea){
 	if (!checkArguments(argc,argv)){
 		return 1;
 	}else{
-
+		int i = 1;
 		do{
 			int bytes_now=0, bytes_consumed = 0;
 			char buffer[SIZE_MAT];
@@ -147,7 +147,6 @@ int validoLinea(double *linea){
 				cantNums1 = fil1 * col1;
 				m1 = (double*) malloc(sizeof(double)*cantNums1);
 				if (ferror (stdin)) printf ("Error reading stdin\n");
-				//do{
 				for(int j =0;j<cantNums1; j++){
 					if(fscanf(stdin, "%lf", &v1) ==1){
 						//printf("value leido : %lf \n", v1 );
@@ -160,7 +159,7 @@ int validoLinea(double *linea){
 						}
 						exit(EXIT_FAILURE);
 					}else{
-						fprintf(stderr, "Reading m1. Unknown error fscanf or EOF \n");
+						fprintf(stderr, "Matriz %d inválida \n", i);
 						if(m1!=NULL){
 							free(m1);
 							m1 = NULL;
@@ -169,6 +168,7 @@ int validoLinea(double *linea){
 					}
 
 				}
+				i++;
 
 
 			}else if (ferror (stdin)){
@@ -189,9 +189,8 @@ int validoLinea(double *linea){
 				//printf("2 - fil :%d, col: %d", fil2, col2);
 				cantNums2 = fil2 * col2;
 				m2 = (double*) malloc(sizeof(double)*cantNums2);
-			//	printf("puntero a m2 1 : %p \n", m2);
 				if (ferror (stdin)) printf ("Error reading stdin\n");
-				//do{
+
 				for(int j =0;j<cantNums2; j++){
 					if(fscanf(stdin, "%lf", &v2) ==1){
 						//printf("value leido 2 : %lf \n", v2 );
@@ -204,7 +203,7 @@ int validoLinea(double *linea){
 						}
 						exit(EXIT_FAILURE);
 					}else{
-						fprintf(stderr, " Reading m2. Unknown error fscanf \n");
+						fprintf(stderr, " Matriz %d incorrecta \n", i);
 						if(m2!=NULL){
 							free(m2);
 							m2 = NULL;
@@ -212,6 +211,7 @@ int validoLinea(double *linea){
 						exit(EXIT_FAILURE);
 					}
 				}
+				i++;
 			}else if (ferror (stdin)){
 				fprintf(stderr, "Error reading stdin\n");
 				if(m2!=NULL){
@@ -220,7 +220,7 @@ int validoLinea(double *linea){
 				}
 				exit(EXIT_FAILURE);
 			}else{
-				fprintf(stderr, " Reading m2. Unknown error fscanf \n");
+				fprintf(stderr, " Matriz %d incorrecta \n", i);
 				if(m2!=NULL){
 					free(m2);
 					m2 = NULL;
