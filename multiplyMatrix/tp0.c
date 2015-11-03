@@ -143,15 +143,14 @@ int validoLinea(double *linea){
 			double v1 = 0.0,v2 = 0.0;
 			//leo matriz 1
 			if(( fscanf(stdin, "%d %c %d", &fil1, &x, &col1 )==3) && !feof(stdin)){
-				printf("1-  fil :%d, col: %d", fil1, col1);
+				//printf("1-  fil :%d, col: %d", fil1, col1);
 				cantNums1 = fil1 * col1;
 				m1 = (double*) malloc(sizeof(double)*cantNums1);
-				printf("puntero a m1 1: %p \n", m1);
 				if (ferror (stdin)) printf ("Error reading stdin\n");
 				//do{
 				for(int j =0;j<cantNums1; j++){
 					if(fscanf(stdin, "%lf", &v1) ==1){
-						printf("value leido : %lf \n", v1 );
+						//printf("value leido : %lf \n", v1 );
 						m1[j] = v1;
 					}else if (ferror (stdin)){
 						fprintf(stderr, "Error reading stdin\n");
@@ -187,15 +186,15 @@ int validoLinea(double *linea){
 				exit(EXIT_FAILURE);
 			}
 			if((fscanf(stdin, "%d %c %d", &fil2, &x, &col2 ) == 3) && !feof(stdin)){
-				printf("2 - fil :%d, col: %d", fil2, col2);
+				//printf("2 - fil :%d, col: %d", fil2, col2);
 				cantNums2 = fil2 * col2;
 				m2 = (double*) malloc(sizeof(double)*cantNums2);
-				printf("puntero a m2 1 : %p \n", m2);
+			//	printf("puntero a m2 1 : %p \n", m2);
 				if (ferror (stdin)) printf ("Error reading stdin\n");
 				//do{
 				for(int j =0;j<cantNums2; j++){
 					if(fscanf(stdin, "%lf", &v2) ==1){
-						printf("value leido 2 : %lf \n", v2 );
+						//printf("value leido 2 : %lf \n", v2 );
 						m2[j] = v2;
 					}else if (ferror (stdin)){
 						fprintf(stderr, "Error reading stdin\n");
@@ -255,12 +254,12 @@ int validoLinea(double *linea){
 
 			if (col1== fil2){
 				double* out = (double*) malloc(sizeof(double)*fil1*col2);
-				printf("puntero a m1 2: %p\n", m1);
-				printf("puntero a m2 2: %p\n", m2);
+//				printf("puntero a m1 2: %p\n", m1);
+//				printf("puntero a m2 2: %p\n", m2);
 				multiplicarMatrices(fil1, col1, fil2, col2, m1, m2, out);
-				for(int j =0; j< fil1*col2; j++){
-					printf("OUT: %d double leido del buffer %lf \n", cantNums2, out[j]);
-				}
+//				for(int j =0; j< fil1*col2; j++){
+//					printf("OUT: %d double leido del buffer %lf \n", cantNums2, out[j]);
+//				}
 				bytes_consumed = 0;
 				memset (buffer,0,SIZE_MAT);
 				sprintf(buffer+ bytes_consumed,"%dx%d%n\n", fil1,col2, & bytes_now);
