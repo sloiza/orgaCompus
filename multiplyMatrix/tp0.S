@@ -11,10 +11,9 @@ multiplicarMatrices:
 		.set 	noreorder
 		.cpload t9
 		.set	reorder
-		subu sp, sp,80
-		.cprestore 64
-		sw ra, 72(sp)
-		sw $fp, 68(sp)
+		subu sp, sp,64
+		.cprestore 56
+		sw $fp, 60(sp)
 		move $fp,sp
 
 		sw 		a0, 0($fp) #guardo f1, c1, f2,c2
@@ -26,9 +25,9 @@ multiplicarMatrices:
 		lw 		a1,4($fp) #c1 LTA
 		lw 		a2,8($fp) #f2 LTA
 		lw 		a3,12($fp) #c2 LTA
-		lw 		t0, 96($fp) #dir M1
-		lw 		t1, 100($fp) #dir M2
-		lw 		t2,104($fp) #dir outs
+		lw 		t0, 80($fp) #dir M1
+		lw 		t1, 84($fp) #dir M2
+		lw 		t2,88($fp) #dir outs
 
 		sw 		t0, 16($fp) #guardo en SF la direccion de m1, m2, out
 		sw 		t1, 20($fp)
@@ -38,8 +37,6 @@ multiplicarMatrices:
 		lw 		t1,4($fp) #t1=c1
 		lw 		t2,8($fp) #t2=f2
 		lw 		t3,12($fp) #t3=c2
-
-
 
 		li 		t0,0 #cargo valor el valor 0 en t0
 		sw 		t0,28($fp) #pos = 0
@@ -109,9 +106,8 @@ endf2: 	lw 		t0, 32($fp) #t0 = i
 
 
 endf1: 	move sp, $fp
-	lw $fp, 68(sp) #recupero fp
-	lw ra, 72(sp) #recupero ra
-	addu sp,sp,80 #restablezco stack frame
+	lw $fp, 60(sp) #recupero fp
+	addu sp,sp,64 #restablezco stack frame
 	jr ra
 	.end multiplicarMatrices
 
