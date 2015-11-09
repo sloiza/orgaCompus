@@ -11,6 +11,10 @@
 	#define SIZE_MAT 50
 
 	void printHelp();
+	void printLinea(int fil, int col, double* matrix);
+	void finally(double* m1,double* m2,double* out);
+
+	double* leerMatriz(int* fil, int* col);
 
 	int  checkArguments(int,char*[]);
 

@@ -15,6 +15,14 @@ void printHelp() {
 
 	printf("%s", help);
 }
+
+void printLinea(int fil, int col, double* matrix){
+	printf("%dx%d ", fil, col);
+	for(int i=0;i<fil*col;i++){
+		printf(" %lf",matrix[i]);
+	}
+	printf("\n");
+}
 int checkArguments(int cantidadArgumentos, char* argumentos[]) {
 	int retorno = 1;
 	if ((cantidadArgumentos == 2)
@@ -52,160 +60,104 @@ int checkArguments(int cantidadArgumentos, char* argumentos[]) {
 // }
 //
 
+double* leerMatriz(int* fil, int* col ){
+	char x;
+	double* m = NULL;
+	double value = 0.0;
+	int cantNums;
+	if(( fscanf(stdin, "%d %c %d", fil, &x, col )==3) && !feof(stdin)){
+		cantNums = (*fil) * (*col);
+		m = (double*) malloc(sizeof(double)*cantNums);
+		if(m == NULL){
+			fprintf(stderr, "Error malloc \n");
+		}
+		if (ferror (stdin)) printf ("Error reading stdin\n");
+		for(int j =0;j<cantNums; j++){
+			if(fscanf(stdin, "%lf", &value) ==1){
+				m[j] = value;
+			}else if (ferror (stdin)){
+				fprintf(stderr, "Error reading stdin\n");
+				if(m!=NULL){
+					free(m);
+					m = NULL;
+				}
+				exit(EXIT_FAILURE);
+			}else{
+				fprintf(stderr, "Matriz inválida \n" );
+				if(m!=NULL){
+					free(m);
+					m = NULL;
+				}
+				exit(EXIT_FAILURE);
+			}
 
+		}
+
+
+	}else if (ferror (stdin)){
+		fprintf(stderr, "Error reading stdin\n");
+		if(m!=NULL){
+			free(m);
+			m = NULL;
+		}
+		exit(EXIT_FAILURE);
+	}else{
+		if(m!=NULL){
+			free(m);
+			m = NULL;
+		}
+		exit(EXIT_FAILURE);
+	}
+
+	return m;
+}
+
+void finally(double* m1,double* m2,double* out){
+	if(m1 != NULL){
+		free(m1);
+		m1 = NULL;
+	}
+	if(m2 != NULL){
+		free(m2);
+		m2 = NULL;
+	}
+	if(out !=NULL){
+		free(out);
+		out = NULL;
+	}
+}
 
  int main(int argc, char *argv[])
 {
 	if (!checkArguments(argc,argv)){
 		return 1;
 	}else{
-		int i = 1;
 		do{
-			int bytes_now=0, bytes_consumed = 0;
-			char buffer[SIZE_MAT];
-
 			int fil1 = 0, col1 = 0, fil2 = 0, col2 = 0;
-			int cantNums1 = 0, cantNums2 = 0;
 			double* m1 = NULL;
 			double* m2 = NULL;
-			char x;
-			double v1 = 0.0,v2 = 0.0;
-			//leo matriz 1
-			if(( fscanf(stdin, "%d %c %d", &fil1, &x, &col1 )==3) && !feof(stdin)){
-				cantNums1 = fil1 * col1;
-				m1 = (double*) malloc(sizeof(double)*cantNums1);
-				if (ferror (stdin)) printf ("Error reading stdin\n");
-				for(int j =0;j<cantNums1; j++){
-					if(fscanf(stdin, "%lf", &v1) ==1){
-						m1[j] = v1;
-					}else if (ferror (stdin)){
-						fprintf(stderr, "Error reading stdin\n");
-						if(m1!=NULL){
-							free(m1);
-							m1 = NULL;
-						}
-						exit(EXIT_FAILURE);
-					}else{
-						fprintf(stderr, "Matriz %d inválida \n", i);
-						if(m1!=NULL){
-							free(m1);
-							m1 = NULL;
-						}
-						exit(EXIT_FAILURE);
-					}
+			double* out = NULL;
 
-				}
-				i++;
-
-
-			}else if (ferror (stdin)){
-				fprintf(stderr, "Error reading stdin\n");
-				if(m1!=NULL){
-					free(m1);
-					m1 = NULL;
-				}
-				exit(EXIT_FAILURE);
-			}else{
-				if(m1!=NULL){
-					free(m1);
-					m1 = NULL;
-				}
-				exit(EXIT_FAILURE);
-			}
-			if((fscanf(stdin, "%d %c %d", &fil2, &x, &col2 ) == 3) && !feof(stdin)){
-				cantNums2 = fil2 * col2;
-				m2 = (double*) malloc(sizeof(double)*cantNums2);
-				if (ferror (stdin)) printf ("Error reading stdin\n");
-
-				for(int j =0;j<cantNums2; j++){
-					if(fscanf(stdin, "%lf", &v2) ==1){
-						m2[j] = v2;
-					}else if (ferror (stdin)){
-						fprintf(stderr, "Error reading stdin\n");
-						if(m2!=NULL){
-							free(m2);
-							m2 = NULL;
-						}
-						exit(EXIT_FAILURE);
-					}else{
-						fprintf(stderr, " Matriz %d incorrecta \n", i);
-						if(m2!=NULL){
-							free(m2);
-							m2 = NULL;
-						}
-						exit(EXIT_FAILURE);
-					}
-				}
-				i++;
-			}else if (ferror (stdin)){
-				fprintf(stderr, "Error reading stdin\n");
-				if(m2!=NULL){
-					free(m2);
-					m2 = NULL;
-				}
-				exit(EXIT_FAILURE);
-			}else{
-				fprintf(stderr, " Matriz %d incorrecta \n", i);
-				if(m2!=NULL){
-					free(m2);
-					m2 = NULL;
-				}
-				exit(EXIT_FAILURE);
-			}
+			m1 = leerMatriz(&fil1, &col1 );
+			m2 = leerMatriz(&fil2, &col2 );
 
 			if (col1== fil2){
-				double* out = (double*) malloc(sizeof(double)*fil1*col2);
-				multiplicarMatrices(fil1, col1, fil2, col2, m1, m2, out);
-				bytes_consumed = 0;
-				memset (buffer,0,SIZE_MAT);
-				sprintf(buffer+ bytes_consumed,"%dx%d%n\n", fil1,col2, & bytes_now);
-				bytes_consumed += bytes_now;
-				for(int i=0;i<fil1*col2;i++){
-					sprintf(buffer+ bytes_consumed," %lf%n",out[i], & bytes_now);
-					bytes_consumed += bytes_now;
+				out = (double*) malloc(sizeof(double)*fil1*col2);
+				if(out == NULL){
+					fprintf(stderr, "Error malloc \n");
 				}
-				puts(buffer);
+				multiplicarMatrices(fil1, col1, fil2, col2, m1, m2, out);
+				printLinea(fil1, col2, out);
 				if (ferror(stdout)){
-					fprintf(stderr, "Error printing stdin\n");
-					if(m1 != NULL){
-						free(m1);
-						m1 = NULL;
-					}
-					if(m2 != NULL){
-						free(m2);
-						m2 = NULL;
-					}
-					if(out !=NULL){
-						free(out);
-						out = NULL;
-					}
+					fprintf(stderr, "Error printing stdout\n");
+					finally(m1,m2,out);
 					exit(EXIT_FAILURE);
 				}
 
-
-
-				if(m1 != NULL){
-					free(m1);
-					m1 = NULL;
-				}
-				if(m2 != NULL){
-					free(m2);
-					m2 = NULL;
-				}
-				if(out !=NULL){
-					free(out);
-					out = NULL;
-				}
+				finally(m1,m2,out);
 			}else{
 				fprintf(stderr,"Matrices incorrectas para la multiplicacion. \n");
-				if(m1 != NULL){
-					free(m1);
-					m1 = NULL;
-				}
-				if(m2 != NULL){
-					free(m2);
-					m2 = NULL;
-				}
+				finally(m1,m2,out);
 				exit(EXIT_FAILURE);
 			}
 		}while(!feof(stdin));
