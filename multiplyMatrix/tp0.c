@@ -18,10 +18,28 @@ void printHelp() {
 
 void printLinea(int fil, int col, double* matrix){
 	printf("%dx%d ", fil, col);
+	if (ferror(stdout)){
+		fprintf(stderr, "Error printing stdout\n");
+		free(matrix);
+		matrix = NULL;
+		exit(EXIT_FAILURE);
+	}
 	for(int i=0;i<fil*col;i++){
 		printf(" %lf",matrix[i]);
+		if (ferror(stdout)){
+			fprintf(stderr, "Error printing stdout\n");
+			free(matrix);
+			matrix = NULL;
+			exit(EXIT_FAILURE);
+		}
 	}
 	printf("\n");
+	if (ferror(stdout)){
+		fprintf(stderr, "Error printing stdout\n");
+		free(matrix);
+		matrix = NULL;
+		exit(EXIT_FAILURE);
+	}
 }
 int checkArguments(int cantidadArgumentos, char* argumentos[]) {
 	int retorno = 1;
@@ -66,22 +84,31 @@ double* leerMatriz(int* fil, int* col ){
 	double value = 0.0;
 	int cantNums;
 	if(( fscanf(stdin, "%d %c %d", fil, &x, col )==3) && !feof(stdin)){
+		if (ferror (stdin)){
+			printf ("Error reading stdin\n");
+			if(m!=NULL){
+				free(m);
+				m = NULL;
+			}
+			exit(EXIT_FAILURE);
+		}
 		cantNums = (*fil) * (*col);
 		m = (double*) malloc(sizeof(double)*cantNums);
 		if(m == NULL){
 			fprintf(stderr, "Error malloc \n");
 		}
-		if (ferror (stdin)) printf ("Error reading stdin\n");
+
 		for(int j =0;j<cantNums; j++){
 			if(fscanf(stdin, "%lf", &value) ==1){
-				m[j] = value;
-			}else if (ferror (stdin)){
-				fprintf(stderr, "Error reading stdin\n");
-				if(m!=NULL){
-					free(m);
-					m = NULL;
+				if (ferror (stdin)){
+					printf ("Error reading stdin\n");
+					if(m!=NULL){
+						free(m);
+						m = NULL;
+					}
+					exit(EXIT_FAILURE);
 				}
-				exit(EXIT_FAILURE);
+				m[j] = value;
 			}else{
 				fprintf(stderr, "Matriz inválida \n" );
 				if(m!=NULL){
@@ -94,13 +121,6 @@ double* leerMatriz(int* fil, int* col ){
 		}
 
 
-	}else if (ferror (stdin)){
-		fprintf(stderr, "Error reading stdin\n");
-		if(m!=NULL){
-			free(m);
-			m = NULL;
-		}
-		exit(EXIT_FAILURE);
 	}else{
 		if(m!=NULL){
 			free(m);
@@ -148,11 +168,7 @@ void finally(double* m1,double* m2,double* out){
 				}
 				multiplicarMatrices(fil1, col1, fil2, col2, m1, m2, out);
 				printLinea(fil1, col2, out);
-				if (ferror(stdout)){
-					fprintf(stderr, "Error printing stdout\n");
-					finally(m1,m2,out);
-					exit(EXIT_FAILURE);
-				}
+
 
 				finally(m1,m2,out);
 			}else{
